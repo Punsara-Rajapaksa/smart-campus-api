@@ -19,3 +19,17 @@ HATEOAS is a REST constraint where API responses include hypermedia links that g
 - **Loose Coupling:** The server can change URI structures without breaking clients, as long as link relations remain consistent.
 - **Self‑Documentation:** The API becomes explorable, reducing reliance on out‑of‑date external docs.
 - **State Transitions:** Clients understand valid state transitions (e.g., from a room to its sensors) by following links.
+
+## Part 2: Room Management
+
+### 2.1 Returning IDs vs Full Objects
+
+When returning a list of rooms, returning only IDs reduces network bandwidth significantly because the response contains just integer values rather than complete JSON objects. However, this forces the client to make an additional HTTP request for each room to retrieve full details, increasing latency and client‑side processing complexity.
+
+Returning full room objects in a single request eliminates extra round trips and simplifies client logic, but the payload size grows with the number of rooms and fields. For a small‑scale campus API with modest data, the convenience of full objects outweighs the bandwidth concern. 
+
+### 2.2 Idempotency of DELETE
+
+The `DELETE` operation in our implementation is idempotent. After a successful deletion (HTTP `204`), the room no longer exists. If the client mistakenly sends the same `DELETE` request again, the server cannot find the room and returns `404 Not Found`. The server state remains unchanged (the room is still absent).
+
+Even if the client sends the request 100 times, the outcome is identical: the room stays deleted. This satisfies the idempotency constraint because the effect of multiple identical requests is the same as a single request.

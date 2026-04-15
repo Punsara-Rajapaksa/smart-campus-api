@@ -1,6 +1,8 @@
 package com.smartcampus.config;
 
 import com.smartcampus.resource.DiscoveryResource;
+import com.smartcampus.resource.RoomResource;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -13,6 +15,7 @@ public class SmartCampusApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
         classes.add(DiscoveryResource.class);
+        classes.add(RoomResource.class);
         return classes;
     }
 }
