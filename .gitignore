@@ -13,6 +13,7 @@ build/
 nbbuild/
 dist/
 nbdist/
+nb-configuration.xml
 
 # IDE files (IntelliJ, Eclipse, VS Code)
 .idea/
