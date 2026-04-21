@@ -56,10 +56,17 @@ public class RoomResource {
                 .findFirst()
                 .orElse(null);
         if (room == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            ErrorMessage error = new ErrorMessage(
+                404,
+                "ROOM_NOT_FOUND",
+                "Room with ID " + roomId + " does not exist."
+            );
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(error)
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         }
 
-        // Check if any sensor references this room (roomId is now String)
         boolean hasSensors = DataStore.sensors.stream()
                 .anyMatch(s -> s.getRoomId().equals(roomId));
         if (hasSensors) {
@@ -67,6 +74,6 @@ public class RoomResource {
         }
 
         DataStore.rooms.remove(room);
-        return Response.noContent().build(); // 204 No Content
+        return Response.noContent().build();
     }
 }
