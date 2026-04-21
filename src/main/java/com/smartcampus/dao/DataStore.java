@@ -1,7 +1,9 @@
 package com.smartcampus.dao;
 
+import com.smartcampus.model.Reading;
 import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,6 +16,12 @@ public class DataStore {
     // In-memory collections 
     public static final List<Room> rooms = new ArrayList<>();
     public static final List<Sensor> sensors = new ArrayList<>();
+    
+    // ID generator for readings (thread-safe)
+    private static final AtomicInteger readingIdGenerator = new AtomicInteger(1);
+    
+    // In-memory list of all sensor readings
+    public static final List<Reading> readings = new ArrayList<>();    
 
     // Static initializer with sample data
     static {
@@ -30,6 +38,11 @@ public class DataStore {
         sensors.add(sensor1);
         sensors.add(sensor2);
         sensors.add(sensor3);
+        
+        // Sample readings for sensor 1 (CO2)
+        readings.add(new Reading(readingIdGenerator.getAndIncrement(), 1, 450.0, LocalDateTime.now().minusHours(1).toString()));
+        readings.add(new Reading(readingIdGenerator.getAndIncrement(), 1, 455.0, LocalDateTime.now().toString()));
+        readings.add(new Reading(readingIdGenerator.getAndIncrement(), 2, 85.0, LocalDateTime.now().minusMinutes(30).toString()));        
     }
 
     // Utility methods for ID generation
@@ -40,4 +53,8 @@ public class DataStore {
     public static int nextSensorId() {
         return sensorIdGenerator.getAndIncrement();
     }
+    
+    public static int nextReadingId() {
+        return readingIdGenerator.getAndIncrement();
+    }    
 }

@@ -49,3 +49,18 @@ The query parameter approach is superior for filtering collections because:
 - **Flexibility:** Multiple independent filters can be combined easily (`?type=CO2&status=ACTIVE`). With path parameters, combining filters becomes messy or impossible.
 - **Discoverability:** The base resource URL (`/sensors`) remains clean and consistent regardless of which filters are applied.
 - **RESTful Conventions:** Leading APIs (e.g., Google, GitHub) use query parameters for optional filtering, following established best practices.
+
+## Part 4: Deep Nesting with Sub‑Resources
+
+### 4.1 Benefits of the Sub‑Resource Locator Pattern
+
+The sub‑resource locator pattern delegates a sub‑path (`{sensorId}/readings`) to a separate resource class (`SensorReadingResource`). This offers several architectural advantages over defining all nested paths in a single monolithic controller:
+
+- **Separation of Concerns:** Each resource class handles a single responsibility. `SensorResource` manages sensor metadata; `SensorReadingResource` manages historical readings.
+- **Code Maintainability:** Smaller, focused classes are easier to read, test, and debug.
+- **Reusability:** The sub‑resource class can be instantiated with different parent contexts (e.g., also used under `/rooms/{roomId}/sensors/{sensorId}/readings` if needed).
+- **Natural Hierarchy:** The URL structure (`/sensors/1/readings`) maps cleanly to object‑oriented design, making the API intuitive.
+
+### 4.2 Updating Parent Sensor on POST
+
+When a new reading is posted to `/sensors/{sensorId}/readings`, the API updates the parent sensor's `currentValue` field. This ensures data consistency across the API: the `currentValue` always reflects the most recent reading without requiring clients to make an additional request. It also mirrors real‑world sensor behaviour where the latest reading is a summary attribute of the sensor itself.

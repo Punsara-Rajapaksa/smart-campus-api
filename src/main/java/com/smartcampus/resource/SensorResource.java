@@ -47,4 +47,22 @@ public class SensorResource {
         URI location = URI.create("/api/v1/sensors/" + sensor.getId());
         return Response.created(location).entity(sensor).build();
     }
+
+    @GET
+    @Path("/{sensorId}")
+    public Response getSensorById(@PathParam("sensorId") int sensorId) {
+        Sensor sensor = DataStore.sensors.stream()
+                .filter(s -> s.getId() == sensorId)
+                .findFirst()
+                .orElse(null);
+        if (sensor == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(sensor).build();
+    }    
+    
+    @Path("/{sensorId}/readings")
+    public SensorReadingResource getSensorReadingResource(@PathParam("sensorId") int sensorId) {
+        return new SensorReadingResource(sensorId);
+    }    
 }
