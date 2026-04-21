@@ -1,15 +1,15 @@
 package com.smartcampus.model;
 
 public class Sensor {
-    private int id;
+    private String id;
     private String type;
     private String status;
     private double currentValue;
-    private int roomId;
+    private String roomId;
 
     public Sensor() {}
 
-    public Sensor(int id, String type, String status, double currentValue, int roomId) {
+    public Sensor(String id, String type, String status, double currentValue, String roomId) {
         this.id = id;
         this.type = type;
         this.status = status;
@@ -18,8 +18,8 @@ public class Sensor {
     }
 
     // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
@@ -30,6 +30,6 @@ public class Sensor {
     public double getCurrentValue() { return currentValue; }
     public void setCurrentValue(double currentValue) { this.currentValue = currentValue; }
 
-    public int getRoomId() { return roomId; }
-    public void setRoomId(int roomId) { this.roomId = roomId; }
+    public String getRoomId() { return roomId; }
+    public void setRoomId(String roomId) { this.roomId = roomId; }
 }

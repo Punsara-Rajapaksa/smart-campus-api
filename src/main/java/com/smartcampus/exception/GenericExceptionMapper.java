@@ -6,6 +6,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.core.MediaType;
 
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
@@ -21,6 +22,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
         );
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(error)
+                .type(MediaType.APPLICATION_JSON)
                 .build();
     }
 }

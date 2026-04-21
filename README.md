@@ -56,7 +56,7 @@ curl -X GET http://localhost:8080/SmartCampusAPI/api/v1/rooms
 
 #### 3. Create a New Room
 ```bash
-curl -X POST http://localhost:8080/SmartCampusAPI/api/v1/rooms -H "Content-Type: application/json" -d "{\"name\":\"Conference Room\",\"location\":\"Building D\",\"capacity\":25}"
+curl -X POST http://localhost:8080/SmartCampusAPI/api/v1/rooms -H "Content-Type: application/json" -d "{\"name\":\"Conference Room\",\"capacity\":25}"
 ```
 
 #### 4. Get Sensors Filtered by Type (e.g., CO2)
@@ -66,7 +66,7 @@ curl -X GET "http://localhost:8080/SmartCampusAPI/api/v1/sensors?type=CO2"
 
 #### 5. Add a Sensor Reading (updates sensor's current value)
 ```bash
-curl -X POST http://localhost:8080/SmartCampusAPI/api/v1/sensors/1/readings -H "Content-Type: application/json" -d "{\"value\":465.5}"
+curl -X POST http://localhost:8080/SmartCampusAPI/api/v1/sensors/S1/readings -H "Content-Type: application/json" -d "{\"value\":465.5}"
 ```
 
 ---
@@ -97,7 +97,7 @@ HATEOAS is a REST constraint where API responses include hypermedia links that g
 
 ### 2.1 Returning IDs vs Full Objects
 
-When returning a list of rooms, returning only IDs reduces network bandwidth significantly because the response contains just integer values rather than complete JSON objects. However, this forces the client to make an additional HTTP request for each room to retrieve full details, increasing latency and client‑side processing complexity.
+When returning a list of rooms, returning only IDs reduces network bandwidth significantly because the response contains just string identifiers rather than complete JSON objects. However, this forces the client to make an additional HTTP request for each room to retrieve full details, increasing latency and client‑side processing complexity.
 
 Returning full room objects in a single request eliminates extra round trips and simplifies client logic, but the payload size grows with the number of rooms and fields. For a small‑scale campus API with modest data, the convenience of full objects outweighs the bandwidth concern. 
 
@@ -132,7 +132,7 @@ The sub‑resource locator pattern delegates a sub‑path (`{sensorId}/readings`
 - **Separation of Concerns:** Each resource class handles a single responsibility. `SensorResource` manages sensor metadata; `SensorReadingResource` manages historical readings.
 - **Code Maintainability:** Smaller, focused classes are easier to read, test, and debug.
 - **Reusability:** The sub‑resource class can be instantiated with different parent contexts (e.g., also used under `/rooms/{roomId}/sensors/{sensorId}/readings` if needed).
-- **Natural Hierarchy:** The URL structure (`/sensors/1/readings`) maps cleanly to object‑oriented design, making the API intuitive.
+- **Natural Hierarchy:** The URL structure (`/sensors/S1/readings`) maps cleanly to object‑oriented design, making the API intuitive.
 
 ## Part 5: Advanced Error Handling, Exception Mapping & Logging
 
