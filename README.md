@@ -77,7 +77,7 @@ curl -X POST http://localhost:8080/SmartCampusAPI/api/v1/sensors/1/readings -H "
 
 ### 1.1 JAX‑RS Resource Lifecycle & In‑Memory Data Synchronisation
 
-By default, JAX‑RS resource classes are request‑scoped: the runtime creates a new instance of the resource class for every incoming HTTP request. This means instance variables are not shared across requests, which is safe but may lead to higher object allocation overhead.
+By default, JAX‑RS resource classes are request‑scoped, the runtime creates a new instance of the resource class for every incoming HTTP request. This means instance variables are not shared across requests, which is safe but may lead to higher object allocation overhead.
 
 For our in‑memory data structures (e.g., `HashMap`, `ArrayList`), they must be declared as `static` fields or stored in a separate singleton DAO class so that all resource instances access the same shared data. Without proper synchronisation (e.g., using `ConcurrentHashMap` or `synchronized` blocks), concurrent requests could cause race conditions or data corruption.
 
@@ -136,15 +136,17 @@ The sub‑resource locator pattern delegates a sub‑path (`{sensorId}/readings`
 
 ### 4.2 Updating Parent Sensor on POST
 
+*(No specific question was asked for this part, this answer is included for context.)*
+
 When a new reading is posted to `/sensors/{sensorId}/readings`, the API updates the parent sensor's `currentValue` field. This ensures data consistency across the API: the `currentValue` always reflects the most recent reading without requiring clients to make an additional request. It also mirrors real‑world sensor behaviour where the latest reading is a summary attribute of the sensor itself.
 
 ## Part 5: Advanced Error Handling, Exception Mapping & Logging
 
-### 5.1 Why 422 over 404 for Missing Reference in Payload?
+### 5.2 Why 422 over 404 for Missing Reference in Payload?
 
 HTTP `404 Not Found` indicates that the requested URI does not exist. In the case of a `POST /sensors` with a valid URI but an invalid `roomId` in the JSON body, the URI itself is correct, the resource being operated on (`/sensors`) exists. The problem is with the semantic validity of the provided data. HTTP `422 Unprocessable Entity` signals that the server understands the content type and syntax, but cannot process the contained instructions due to a logical error. This is more accurate and provides clearer client guidance.
 
-### 5.2 Cybersecurity Risks of Exposing Stack Traces
+### 5.4 Cybersecurity Risks of Exposing Stack Traces
 
 Exposing Java stack traces to external API consumers reveals sensitive internal information, including:
 - **Package and class names**: Giving attackers insight into the application's internal architecture.
@@ -154,7 +156,7 @@ Exposing Java stack traces to external API consumers reveals sensitive internal 
 
 An attacker can use this information to craft targeted exploits. The global `ExceptionMapper<Throwable>` safely logs the full trace server‑side while returning only a generic error to the client.
 
-### 5.3 Advantages of JAX‑RS Filters for Logging
+### 5.5 Advantages of JAX‑RS Filters for Logging
 
 Using `ContainerRequestFilter` and `ContainerResponseFilter` for cross‑cutting concerns like logging is superior to manually inserting `Logger.info()` statements in every resource method because:
 - **Single Responsibility:** Filters centralise logging logic, keeping resource classes focused on business rules.
