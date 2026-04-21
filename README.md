@@ -111,7 +111,7 @@ Even if the client sends the request 100 times, the outcome is identical: the ro
 
 ### 3.1 @Consumes and Media Type Mismatch
 
-The `@Consumes(MediaType.APPLICATION_JSON)` annotation tells JAX‑RS that the `POST` method only accepts requests with a `Content-Type: application/json` header. If a client sends data in a different format (e.g., `text/plain` or `application/xml`), JAX‑RS cannot find a suitable `MessageBodyReader` to deserialize the request body. The runtime then returns an HTTP 415 Unsupported Media Type error, indicating the server refuses to process the payload because its format is not supported.
+The `@Consumes(MediaType.APPLICATION_JSON)` annotation tells JAX‑RS that the `POST` method only accepts requests with a `Content-Type: application/json` header. If a client sends data in a different format (e.g., `text/plain` or `application/xml`), JAX‑RS cannot find a suitable `MessageBodyReader` to deserialize the request body. The runtime then returns an HTTP `415 Unsupported Media Type` error, indicating the server refuses to process the payload because its format is not supported.
 
 ### 3.2 @QueryParam vs Path Parameter for Filtering
 
