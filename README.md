@@ -134,12 +134,6 @@ The sub‑resource locator pattern delegates a sub‑path (`{sensorId}/readings`
 - **Reusability:** The sub‑resource class can be instantiated with different parent contexts (e.g., also used under `/rooms/{roomId}/sensors/{sensorId}/readings` if needed).
 - **Natural Hierarchy:** The URL structure (`/sensors/1/readings`) maps cleanly to object‑oriented design, making the API intuitive.
 
-### 4.2 Updating Parent Sensor on POST
-
-*(No specific question was asked for this part, this answer is included for context.)*
-
-When a new reading is posted to `/sensors/{sensorId}/readings`, the API updates the parent sensor's `currentValue` field. This ensures data consistency across the API: the `currentValue` always reflects the most recent reading without requiring clients to make an additional request. It also mirrors real‑world sensor behaviour where the latest reading is a summary attribute of the sensor itself.
-
 ## Part 5: Advanced Error Handling, Exception Mapping & Logging
 
 ### 5.2 Why 422 over 404 for Missing Reference in Payload?
