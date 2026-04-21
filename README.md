@@ -138,6 +138,8 @@ The sub‑resource locator pattern delegates a sub‑path (`{sensorId}/readings`
 
 When a new reading is posted to `/sensors/{sensorId}/readings`, the API updates the parent sensor's `currentValue` field. This ensures data consistency across the API: the `currentValue` always reflects the most recent reading without requiring clients to make an additional request. It also mirrors real‑world sensor behaviour where the latest reading is a summary attribute of the sensor itself.
 
+## Part 5: Advanced Error Handling, Exception Mapping & Logging
+
 ### 5.1 Why 422 over 404 for Missing Reference in Payload?
 
 HTTP `404 Not Found` indicates that the requested URI does not exist. In the case of a `POST /sensors` with a valid URI but an invalid `roomId` in the JSON body, the URI itself is correct, the resource being operated on (`/sensors`) exists. The problem is with the semantic validity of the provided data. HTTP `422 Unprocessable Entity` signals that the server understands the content type and syntax, but cannot process the contained instructions due to a logical error. This is more accurate and provides clearer client guidance.
