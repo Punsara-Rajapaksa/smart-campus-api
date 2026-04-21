@@ -33,3 +33,19 @@ Returning full room objects in a single request eliminates extra round trips and
 The `DELETE` operation in our implementation is idempotent. After a successful deletion (HTTP `204`), the room no longer exists. If the client mistakenly sends the same `DELETE` request again, the server cannot find the room and returns `404 Not Found`. The server state remains unchanged (the room is still absent).
 
 Even if the client sends the request 100 times, the outcome is identical: the room stays deleted. This satisfies the idempotency constraint because the effect of multiple identical requests is the same as a single request.
+
+## Part 3: Sensor Operations & Linking
+
+### 3.1 @Consumes and Media Type Mismatch
+
+The `@Consumes(MediaType.APPLICATION_JSON)` annotation tells JAX‑RS that the `POST` method only accepts requests with a `Content-Type: application/json` header. If a client sends data in a different format (e.g., `text/plain` or `application/xml`), JAX‑RS cannot find a suitable `MessageBodyReader` to deserialize the request body. The runtime then returns an HTTP 415 Unsupported Media Type error, indicating the server refuses to process the payload because its format is not supported.
+
+### 3.2 @QueryParam vs Path Parameter for Filtering
+
+We implemented filtering using `@QueryParam("type")`, resulting in URLs like `/sensors?type=CO2`. An alternative design would embed the type in the path: `/sensors/type/CO2`.
+
+The query parameter approach is superior for filtering collections because:
+- **Semantics:** Query parameters are designed for optional, non‑hierarchical modifiers. The path should identify a specific resource or sub‑collection.
+- **Flexibility:** Multiple independent filters can be combined easily (`?type=CO2&status=ACTIVE`). With path parameters, combining filters becomes messy or impossible.
+- **Discoverability:** The base resource URL (`/sensors`) remains clean and consistent regardless of which filters are applied.
+- **RESTful Conventions:** Leading APIs (e.g., Google, GitHub) use query parameters for optional filtering, following established best practices.
