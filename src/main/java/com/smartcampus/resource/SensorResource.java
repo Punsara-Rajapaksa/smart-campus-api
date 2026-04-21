@@ -1,6 +1,7 @@
 package com.smartcampus.resource;
 
 import com.smartcampus.dao.DataStore;
+import com.smartcampus.exception.LinkedResourceNotFoundException;
 import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
 
@@ -35,9 +36,7 @@ public class SensorResource {
         boolean roomExists = DataStore.rooms.stream()
                 .anyMatch(r -> r.getId() == sensor.getRoomId());
         if (!roomExists) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Room with ID " + sensor.getRoomId() + " does not exist")
-                    .build();
+            throw new LinkedResourceNotFoundException("Room with ID " + sensor.getRoomId() + " does not exist.");
         }
 
         // Assign new ID and add to store
@@ -54,7 +53,7 @@ public class SensorResource {
         Sensor sensor = DataStore.sensors.stream()
                 .filter(s -> s.getId() == sensorId)
                 .findFirst()
-                .orElse(null);
+                .orElse(null);       
         if (sensor == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

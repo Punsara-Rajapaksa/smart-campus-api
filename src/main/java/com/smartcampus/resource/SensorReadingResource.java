@@ -1,6 +1,7 @@
 package com.smartcampus.resource;
 
 import com.smartcampus.dao.DataStore;
+import com.smartcampus.exception.SensorUnavailableException;
 import com.smartcampus.model.Reading;
 import com.smartcampus.model.Sensor;
 
@@ -48,9 +49,7 @@ public class SensorReadingResource {
 
         // Ensure the sensor is not in MAINTENANCE 
         if ("MAINTENANCE".equalsIgnoreCase(sensor.getStatus())) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .entity("Sensor is in maintenance mode and cannot accept readings")
-                    .build();
+            throw new SensorUnavailableException("Sensor " + sensorId + " is in maintenance mode and cannot accept readings.");
         }
 
         // Set IDs and timestamp

@@ -1,6 +1,7 @@
 package com.smartcampus.resource;
 
 import com.smartcampus.dao.DataStore;
+import com.smartcampus.exception.RoomNotEmptyException;
 import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
 
@@ -62,10 +63,7 @@ public class RoomResource {
         boolean hasSensors = DataStore.sensors.stream()
                 .anyMatch(s -> s.getRoomId() == roomId);
         if (hasSensors) {
-            // Return 409 Conflict 
-            return Response.status(Response.Status.CONFLICT)
-                    .entity("Cannot delete room with active sensors")
-                    .build();
+            throw new RoomNotEmptyException("Room " + roomId + " cannot be deleted because it has active sensors.");
         }
 
         DataStore.rooms.remove(room);
