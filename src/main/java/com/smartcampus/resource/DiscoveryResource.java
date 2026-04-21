@@ -19,16 +19,14 @@ public class DiscoveryResource {
         // API Version Info
         metadata.put("apiName", "Smart Campus API");
         metadata.put("version", "1.0.0");
-        metadata.put("releaseDate", "2026-04");
         
-        // Administrative Contact
+        // Administrative Contact 
         Map<String, String> contact = new HashMap<>();
-        contact.put("name", "Campus Facilities IT Team");
-        contact.put("email", "api-support@smartcampus.edu");
-        contact.put("documentation", "https://smartcampus.edu/api/docs");
+        contact.put("name", "Smart Campus Admin");
+        contact.put("email", "admin@university.edu");
         metadata.put("contact", contact);
         
-        // Resource Collections Map (HATEOAS links)
+        // Resource Collections Map
         Map<String, String> resources = new HashMap<>();
         resources.put("rooms", "/api/v1/rooms");
         resources.put("sensors", "/api/v1/sensors");
